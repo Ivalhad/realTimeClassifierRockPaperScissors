@@ -34,6 +34,7 @@ class CameraIntegration {
 	bindEvents() {
 		this.startBtn.onclick = () => this.startCamera();
 		this.stopBtn.onclick = () => this.stopCamera();
+		this.fpsSelect.onchange = () => this.targetFPS = parseInt(this.fpsSelect.value);
 	}
 
 	/**
@@ -97,6 +98,7 @@ class CameraIntegration {
 					width: { ideal: isMobile ? 480 : 640 },
 					height: { ideal: isMobile ? 640 : 480 },
 					facingMode,
+					frameRate: { ideal: this.targetFPS }
 				}
 			});
 
