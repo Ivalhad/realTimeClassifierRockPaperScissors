@@ -14,13 +14,6 @@ class App {
 		this.init();
 	}
 
-	/**
-	 * TODO:
-	 * Inisialisasi elemen:
-	 * [x] Status Model
-	 * [x] Video & Canvas
-	 * [x] Hasil Prediksi
-	*/
 	initializeElements() {
 		this.modelStatus = document.getElementById('modelStatus');
 		this.video = document.getElementById('videoElement');
@@ -30,10 +23,6 @@ class App {
 		this.confidenceBar = document.getElementById('confidenceBar');
 	}
 
-	/**
-	 * TODO:
-	 * [x] Bind event listener untuk memulai prediksi saat video siap
-	*/
 	bindEvents() {
 		this.video.addEventListener('loadeddata', () => {
 			this.ctx = this.canvas.getContext('2d');
@@ -45,12 +34,6 @@ class App {
 		});
 	}
 
-	/**
-	 * TODO:
-	 * [x] Panggil konstruktor CameraIntegration
-	 * [x] Panggil konstruktor ObjectDetector
-	 * [x] Load model
-	*/
 	async init() {
 		try {
 			this.camera = new CameraIntegration();
@@ -65,11 +48,6 @@ class App {
 		}
 	}
 
-	/**
-	 * TODO:
-	 * [x] Implementasi metode untuk memulai dan menghentikan prediksi
-	 * [x] Implementasi metode prediksi
-	*/
 	startPrediction() {
 		if (this.isRunning) return;
 		this.isRunning = true;
@@ -121,11 +99,6 @@ class App {
 		this.modelStatus.className = `status ${status}`;
 	}
 
-	/**
-	 * TODO:
-	 * [x] Menghentikan kamera
-	 * [x] Implementasi metode untuk membersihkan sumber daya saat aplikasi dihentikan
-	*/
 	destroy() {
 		this.stopPrediction();
 		this.camera.destroy();
@@ -133,10 +106,6 @@ class App {
 	}
 }
 
-/**
- * TODO:
- * [x] Pastikan sumber daya dibersihkan saat jendela ditutup
-*/
 document.addEventListener('DOMContentLoaded', () => {
 	const app = new App();
 	window.addEventListener('beforeunload', () => app.destroy());

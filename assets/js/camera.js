@@ -8,14 +8,6 @@ class CameraIntegration {
 		this.init();
 	}
 
-	/**
-	 * TODO:
-	 * Inisialisasi elemen:
-	 * [] Video
-	 * [] Select Camera
-	 * [] Start & Stop Button 
-	 * [] Pilih FPS 
-	*/
 	initializeElements() {
 		this.video = document.getElementById('videoElement');
 		this.cameraSelect = document.getElementById('cameraSelect');
@@ -24,31 +16,16 @@ class CameraIntegration {
 		this.fpsSelect = document.getElementById('fpsSelect');
 	}
 
-	/**
-	 * TODO:
-	 * Daftarkan event listener untuk elemen:
-	 * [] Start & Stop Button 
-	 * [] Pilih kamera
-	 * [] Pilih FPS 
-	*/
 	bindEvents() {
 		this.startBtn.onclick = () => this.startCamera();
 		this.stopBtn.onclick = () => this.stopCamera();
 		this.fpsSelect.onchange = () => this.targetFPS = parseInt(this.fpsSelect.value);
 	}
 
-	/**
-	 * TODO:
-	 * [] Muat daftar kamera yang tersedia
-	*/
 	async init() {
 		await this.loadCamera();
 	}
 
-	/**
-	 * TODO:
-	 * [] Implementasi metode untuk memuat daftar kamera yang tersedia
-	*/
 	async loadCamera() {
 		try {
 			await navigator.mediaDevices.getUserMedia({ video: true });
@@ -77,12 +54,6 @@ class CameraIntegration {
 		}
 	}
 
-	/**
-	 * TODO:
-	 * [] Cek apakah perangkat adalah mobile
-	 * [] Pengaturan constraints kamera
-	 * [] Optimasi frame rate
-	*/
 	async startCamera() {
 		const isMobile = navigator.userAgentData?.mobile ?? /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
@@ -113,10 +84,6 @@ class CameraIntegration {
 		}
 	}
 
-	/**
-	* TODO:
-	* [] Hentikan semua track pada stream kamera
- */
 	stopCamera() {
 		if (this.stream) {
 			this.stream.getTracks().forEach(track => track.stop());

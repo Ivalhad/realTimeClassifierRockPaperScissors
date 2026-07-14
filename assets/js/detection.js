@@ -5,12 +5,6 @@ class ObjectDetector {
         this.imageSize = 224;
     }
 
-    /**
-     * TODO:
-     * Lengkapi metode untuk memuat model:
-     * [x] Muat model dari './model/model.json'
-     * [x] Muat metadata dari './model/metadata.json'
-    */
     async loadModel() {
         try {
             const [metadata, model] = await Promise.all([
@@ -26,13 +20,6 @@ class ObjectDetector {
         }
     }
 
-    /**
-     * TODO:
-     * Lengkapi metode untuk prediksi:
-     * [x] Logika preprosesing gambar
-     * [x] Lakukan prediksi menggunakan model yang dimuat
-     * [x] Kembalikan hasil prediksi dengan className dan confidence
-    */
     async predict(imageElement) {
         if (!this.model) throw new Error('Model tidak dapat dimuat');
 
@@ -66,10 +53,6 @@ class ObjectDetector {
         return !!this.model;
     }
 
-    /**
-     * TODO:
-     * [x] Lengkapi metode untuk menonaktifkan model menggunakan dispose
-    */
     dispose() {
         if (this.model) {
             this.model.dispose();
