@@ -16,7 +16,13 @@ class CameraIntegration {
 	 * [] Start & Stop Button 
 	 * [] Pilih FPS 
 	*/
-	initializeElements() { }
+	initializeElements() {
+		this.video = document.getElementById('videoElement');
+		this.cameraSelect = document.getElementById('cameraSelect');
+		this.startBtn = document.getElementById('startBtn');
+		this.stopBtn = document.getElementById('stopBtn');
+		this.fpsSelect = document.getElementById('fpsSelect');
+	}
 
 	/**
 	 * TODO:
@@ -25,20 +31,47 @@ class CameraIntegration {
 	 * [] Pilih kamera
 	 * [] Pilih FPS 
 	*/
-	bindEvents() { }
+	bindEvents() {
+		this.startBtn.onclick = () => this.startCamera();
+		this.stopBtn.onclick = () => this.stopCamera();
+	}
 
 	/**
 	 * TODO:
 	 * [] Muat daftar kamera yang tersedia
 	*/
-	async init() { }
+	async init() {
+		await this.loadCamera();
+	}
 
 	/**
 	 * TODO:
 	 * [] Implementasi metode untuk memuat daftar kamera yang tersedia
 	*/
 	async loadCamera() {
-		try { } catch (error) {
+		try {
+			await navigator.mediaDevices.getUserMedia({ video: true });
+			const devices = await navigator.mediaDevices.enumerateDevices();
+
+			const cameras = devices.filter((device) => device.kind === 'videoinput');
+
+			if (cameras.length === 0) {
+				this.cameraSelect.innerHTML = '<option>Kamera tidak ditemukan</option>';
+				this.startBtn.disabled = true;
+				return;
+			}
+
+			cameras.forEach((camera, index) => {
+				const option = document.createElement('option');
+				option.value = camera.deviceId;
+				option.textContent = camera.label || `Kamera ${index + 1}`;
+				this.cameraSelect.appendChild(option);
+			});
+
+			this.cameraSelect.disabled = false
+			this.startBtn.disabled = cameras.length === 0
+		} catch (error) {
+			console.error('Akses kamera ditolak:', error);
 			this.startBtn.disabled = true;
 		}
 	}
@@ -50,19 +83,30 @@ class CameraIntegration {
 	 * [] Optimasi frame rate
 	*/
 	async startCamera() {
+		const isMobile = navigator.userAgentData?.mobile ?? /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 		try {
 			this.startBtn.disabled = true;
-			this.startBtn.textContent = 'Starting...';
+			this.startBtn.textContent = 'Memulai...';
 
-			this.stream = null;
+			const deviceList = this.cameraSelect.value ? { exact: this.cameraSelect.value } : undefined;
+			const facingMode = isMobile ? 'environment' : 'user';
+			this.stream = await navigator.mediaDevices.getUserMedia({
+				video: {
+					deviceId: deviceList,
+					width: { ideal: isMobile ? 480 : 640 },
+					height: { ideal: isMobile ? 640 : 480 },
+					facingMode,
+				}
+			});
 
 			this.video.srcObject = this.stream;
+			await this.video.play();
 			this.updateUI();
 		} catch (error) {
 			alert(error.name === 'NotAllowedError'
-				? 'Camera permission denied. Please allow camera access.'
-				: 'Failed to start camera.');
+				? 'Akses kamera ditolak. Silakan izinkan akses kamera.'
+				: 'Gagal memulai kamera.');
 			this.updateUI();
 		}
 	}
@@ -72,6 +116,11 @@ class CameraIntegration {
 	* [] Hentikan semua track pada stream kamera
  */
 	stopCamera() {
+		if (this.stream) {
+			this.stream.getTracks().forEach(track => track.stop());
+			this.stream = null;
+			this.video.srcObject = null;
+		}
 		this.updateUI();
 	}
 

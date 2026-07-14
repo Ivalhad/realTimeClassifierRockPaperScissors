@@ -1,3 +1,5 @@
+import CameraIntegration from './camera.js';
+
 class App {
 	constructor() {
 		this.camera = null;
@@ -32,16 +34,18 @@ class App {
 	 * [] Load model
 	*/
 	async init() {
-		try { } catch (error) {
-			console.error('Error initializing app:', error);
+		try {
+			this.camera = new CameraIntegration();
+		} catch (error) {
+			console.error('Gagal menginisialisasi aplikasi:', error);
 		}
 	}
 
 	/**
-			 * TODO:
-			 * [] Implementasi metode untuk memulai dan menghentikan prediksi
-			 * [] Implementasi metode prediksi
-			*/
+	 * TODO:
+	 * [] Implementasi metode untuk memulai dan menghentikan prediksi
+	 * [] Implementasi metode prediksi
+	*/
 	startPrediction() { }
 
 	stopPrediction() { }
