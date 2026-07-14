@@ -35,7 +35,7 @@ class App {
 	*/
 	bindEvents() {
 		this.video.addEventListener('loadeddata', () => {
-			const ctx = this.canvas.getContext('2d');
+			this.ctx = this.canvas.getContext('2d');
 			this.canvas.width = this.video.videoWidth;
 			this.canvas.height = this.video.videoHeight;
 			if (this.camera.isReady() && this.detector.isLoaded()) {
@@ -86,7 +86,7 @@ class App {
 		}
 
 		try {
-			ctx.drawImage(this.video, 0, 0);
+			this.ctx.drawImage(this.video, 0, 0);
 
 			const result = await this.detector.predict(this.canvas);
 			this.updateDisplay(result);
