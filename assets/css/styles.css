@@ -1,0 +1,216 @@
+:root {
+    /* Core Colors */
+    --primary: #3498db;
+    --primary-hover: #2980b9;
+    --text: #2c3e50;
+    --text-muted: #7f8c8d;
+    --success: #27ae60;
+    --background: #f5f5f5;
+    --surface: white;
+    --border: #ddd;
+    --disabled: #bdc3c7;
+    
+    /* Spacing */
+    --spacing-sm: 10px;
+    --spacing-md: 15px;
+    --spacing-lg: 20px;
+    --spacing-xl: 30px;
+    
+    /* Typography */
+    --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-serif: 'Georgia', 'Times New Roman', serif;
+}
+
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-sans);
+    background: var(--background);
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+header h1 {
+    font-size: 2rem;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+header p {
+    color: var(--text-muted);
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+select, button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+select:focus, button:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+button {
+    background: var(--primary);
+    color: var(--surface);
+    border-color: var(--primary);
+    min-width: 120px;
+}
+
+button:hover:not(:disabled) {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+button:disabled {
+    background: var(--disabled);
+    border-color: var(--disabled);
+    cursor: not-allowed;
+}
+
+select:disabled {
+    background: #f8f9fa;
+    cursor: not-allowed;
+}
+
+/* Video Container */
+.video-container {
+    position: relative;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: var(--spacing-lg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    aspect-ratio: 4/3;
+    max-height: 60vh;
+}
+
+#videoElement {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+#canvasElement {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Results */
+.results {
+    text-align: center;
+}
+
+.status {
+    padding: 12px var(--spacing-lg);
+    border-radius: 6px;
+    margin-bottom: var(--spacing-md);
+    font-weight: 500;
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.status.ready {
+    background: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.status.error {
+    background: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+.prediction {
+    background: var(--surface);
+    padding: var(--spacing-lg);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.prediction .label {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.prediction .confidence {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--success);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: var(--spacing-md);
+    }
+    
+    .controls {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    select, button {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    .video-container {
+        aspect-ratio: 3/4;
+        max-height: 50vh;
+    }
+    
+    .prediction {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        text-align: center;
+    }
+    
+    header h1 {
+        font-size: 1.5rem;
+    }
+}

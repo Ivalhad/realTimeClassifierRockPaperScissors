@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Computer Vision - Pengenalan Gambar</title>
+	<link rel="icon" type="image/png" href="./assets/images/favicon.png">
+	<link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+
+<body>
+	<div class="container">
+		<header>
+			<h1>Pengenalan Gambar</h1>
+			<p>Deteksi: Batu, Gunting, Kertas</p>
+		</header>
+
+		<main>
+			<!-- Controls -->
+			<div class="controls">
+				<select id="cameraSelect" disabled>
+					<option>Memuat Kamera...</option>
+				</select>
+
+				<select id="fpsSelect">
+					<option value="5">5 FPS</option>
+					<option value="15">15 FPS</option>
+					<option value="30" selected>30 FPS</option>
+					<option value="60">60 FPS</option>
+				</select>
+
+				<button id="startBtn" disabled>Mulai Kamera</button>
+				<button id="stopBtn" disabled>Hentikan Kamera</button>
+			</div>
+
+			<!-- Video -->
+			<div class="video-container">
+				<video id="videoElement" playsinline muted></video>
+				<canvas id="canvasElement"></canvas>
+			</div>
+
+			<!-- Results -->
+			<div class="results">
+				<div id="modelStatus" class="status">Memuat Model...</div>
+				<div id="predictionResult" class="prediction">
+					<div class="label" id="predictionLabel">-</div>
+					<div class="confidence" id="predictionConfidence">0%</div>
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<script type="module" src="./assets/js/app.js"></script>
+</body>
+
+</html>
