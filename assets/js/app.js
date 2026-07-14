@@ -27,6 +27,7 @@ class App {
 		this.canvas = document.getElementById('canvasElement');
 		this.predictionLabel = document.getElementById('predictionLabel');
 		this.predictionConfidence = document.getElementById('predictionConfidence');
+		this.confidenceBar = document.getElementById('confidenceBar');
 	}
 
 	/**
@@ -102,11 +103,17 @@ class App {
 	updateDisplay(result) {
 		this.predictionLabel.textContent = result.className || 'Unknown';
 		this.predictionConfidence.textContent = `${result.confidence || 0}%`;
+		if (this.confidenceBar) {
+			this.confidenceBar.style.width = `${result.confidence || 0}%`;
+		}
 	}
 
 	resetDisplay() {
 		this.predictionLabel.textContent = '-';
 		this.predictionConfidence.textContent = '0%';
+		if (this.confidenceBar) {
+			this.confidenceBar.style.width = '0%';
+		}
 	}
 
 	showStatus(message, status) {
