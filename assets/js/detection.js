@@ -34,36 +34,32 @@ class ObjectDetector {
      * [x] Kembalikan hasil prediksi dengan className dan confidence
     */
     async predict(imageElement) {
-        if (!this.model) {
-            throw new Error('Model belum dimuat.');
+        if (!this.model) throw new Error('Model tidak dapat dimuat');
+
+        const tensor = tf.tidy(() =>
+            tf.browser.fromPixels(imageElement)
+                .resizeBilinear([224, 224])
+                .div(255.0)
+                .expandDims(0)
+        );
+        const predictions = this.model.predict(tensor);
+
+        try {
+            const values = await predictions.data();
+
+            const maxIndex = values.indexOf(Math.max(...values));
+            const result = {
+                className: this.labels[maxIndex],
+                confidence: Math.round(values[maxIndex] * 100)
+            };
+            return result;
+        } catch (error) {
+            console.error('Error during prediction:', error);
+            return { className: 'Error', confidence: 0 };
+        } finally {
+            tensor.dispose();
+            predictions.dispose();
         }
-
-        const tensor = tf.tidy(() => {
-            const img = tf.browser.fromPixels(imageElement);
-            const resized = tf.image.resizeBilinear(img, [this.imageSize, this.imageSize]);
-            const normalized = resized.div(255.0);
-            return normalized.expandDims(0);
-        });
-
-        const predictions = await this.model.predict(tensor);
-        const probabilities = await predictions.data();
-
-        tensor.dispose();
-        predictions.dispose();
-
-        let maxIndex = 0;
-        let maxProb = probabilities[0];
-        for (let i = 1; i < probabilities.length; i++) {
-            if (probabilities[i] > maxProb) {
-                maxProb = probabilities[i];
-                maxIndex = i;
-            }
-        }
-
-        return {
-            className: this.labels[maxIndex] || 'Unknown',
-            confidence: (maxProb * 100).toFixed(1)
-        };
     }
 
     isLoaded() {

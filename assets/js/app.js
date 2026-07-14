@@ -25,7 +25,6 @@ class App {
 		this.modelStatus = document.getElementById('modelStatus');
 		this.video = document.getElementById('videoElement');
 		this.canvas = document.getElementById('canvasElement');
-		this.ctx = this.canvas.getContext('2d');
 		this.predictionLabel = document.getElementById('predictionLabel');
 		this.predictionConfidence = document.getElementById('predictionConfidence');
 	}
@@ -35,14 +34,13 @@ class App {
 	 * [x] Bind event listener untuk memulai prediksi saat video siap
 	*/
 	bindEvents() {
-		this.video.addEventListener('playing', () => {
-			if (this.detector && this.detector.isLoaded()) {
+		this.video.addEventListener('loadeddata', () => {
+			const ctx = this.canvas.getContext('2d');
+			this.canvas.width = this.video.videoWidth;
+			this.canvas.height = this.video.videoHeight;
+			if (this.camera.isReady() && this.detector.isLoaded()) {
 				this.startPrediction();
 			}
-		});
-
-		this.video.addEventListener('pause', () => {
-			this.stopPrediction();
 		});
 	}
 
@@ -79,10 +77,6 @@ class App {
 
 	stopPrediction() {
 		this.isRunning = false;
-		if (this.predictionInterval) {
-			cancelAnimationFrame(this.predictionInterval);
-			this.predictionInterval = null;
-		}
 		this.resetDisplay();
 	}
 
@@ -92,15 +86,16 @@ class App {
 		}
 
 		try {
-			const result = await this.detector.predict(this.video);
+			ctx.drawImage(this.video, 0, 0);
+
+			const result = await this.detector.predict(this.canvas);
 			this.updateDisplay(result);
 		} catch (error) {
-			console.error('Gagal prediksi:', error);
+			console.error('Prediksi error:', error);
 		}
 
-		// Schedule next prediction using requestAnimationFrame
 		if (this.isRunning) {
-			this.predictionInterval = requestAnimationFrame(() => this.predict());
+			requestAnimationFrame(() => this.predict());
 		}
 	}
 
@@ -126,12 +121,8 @@ class App {
 	*/
 	destroy() {
 		this.stopPrediction();
-		if (this.camera) {
-			this.camera.destroy();
-		}
-		if (this.detector) {
-			this.detector.dispose();
-		}
+		this.camera.destroy();
+		this.detector.dispose();
 	}
 }
 
@@ -139,13 +130,7 @@ class App {
  * TODO:
  * [x] Pastikan sumber daya dibersihkan saat jendela ditutup
 */
-let app;
 document.addEventListener('DOMContentLoaded', () => {
-	app = new App();
-});
-
-window.addEventListener('beforeunload', () => {
-	if (app) {
-		app.destroy();
-	}
-});
+	const app = new App();
+	window.addEventListener('beforeunload', () => app.destroy());
+})
